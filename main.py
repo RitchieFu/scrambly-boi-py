@@ -2,6 +2,8 @@ import discord
 import kociemba
 import keep_alive
 import os
+from dotenv import load_dotenv
+
 import random
 import re
 import requests
@@ -11,20 +13,18 @@ import urllib.request
 from bs4 import BeautifulSoup
 from datetime import datetime
 from discord.ext import commands
-from discord.ext.commands import CommandNotFound
 from pyTwistyScrambler import scrambler333, scrambler222, scrambler444, scrambler555, pyraminxScrambler,scrambler666,scrambler777,megaminxScrambler,squareOneScrambler,skewbScrambler,clockScrambler
 from scrambles import *
-from scrambleupdate import *
-from clockimage import *
-from pyraminximage import *
-from squareoneimage import *
-from skewbimage import *
-from megaimage import *
 import asyncio
 import string
 
+load_dotenv()
 bot = commands.Bot(command_prefix = ['plz ', 'Plz ', 'PLZ ']) 
 bot.remove_command('help')
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
 emotes = [
     '🇺','<:redU:718597576122826803>',
@@ -54,17 +54,6 @@ scrambleCommands = {
     'plz 5bld': scrambler555.get_5BLD_scramble,
 }
 
-lastMessage = 1065
-@bot.event
-async def on_ready():
-    print('Bot is ready\n-------------')
-
-@bot.event
-async def on_command_error(ctx, error):
-  if isinstance(error, CommandNotFound): 
-      return
-  raise error
-
 @bot.event
 async def on_message(message):
 
@@ -93,153 +82,6 @@ async def on_message(message):
         embed = discord.Embed(title = '', description = scrambleCommands[(messageSplit[0] + ' ' + messageSplit[1])](), color = 0x43a8ff)
         await channel.send(embed = embed)
 
-@bot.command(aliases=["mega"])
-async def megaminx(ctx):
-    scramble = megaminxScrambler.get_WCA_scramble()
-
-    formatted_scramble = scramble.replace("U' ","U'\n").replace("U ","U\n")
-
-    msg = await ctx.send("```\n" + formatted_scramble + "```")
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = megaimage(scramble)
-        file.save("megaimage.png")
-        await ctx.send(file = discord.File("megaimage.png"))
-        await msg.clear_reactions()
-
-@bot.command(aliases=["skoob"])
-async def skewb(ctx):
-    scramble = skewbScrambler.get_WCA_scramble()
-
-    msg = await ctx.send(scramble)
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = skewbimage(scramble)
-        file.save("skewbimage.png")
-        await ctx.send(file = discord.File("skewbimage.png"))
-        await msg.clear_reactions()
-
-@bot.command(aliases=["sq1", "squareone"])
-async def squan(ctx):
-    scramble = squareOneScrambler.get_WCA_scramble()
-
-    msg = await ctx.send(scramble)
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = squanimage(scramble)
-        file.save("squanimage.png")
-        await ctx.send(file = discord.File("squanimage.png"))
-        await msg.clear_reactions()
-
-@bot.command(aliases=["pyra"])
-async def pyraminx(ctx):
-    scramble = pyraminxScrambler.get_WCA_scramble()
-
-    msg = await ctx.send(scramble)
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = pyraimage(scramble)
-        file.save("pyraimage.png")
-        await ctx.send(file = discord.File("pyraimage.png"))
-        await msg.clear_reactions()
-
-@bot.command(aliases=["cloncc"])
-async def clock(ctx):
-    scramble = clockScrambler.get_WCA_scramble()
-
-    msg = await ctx.send(scramble)
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = clockimage(scramble)
-        file.save("clockimage.png")
-        await ctx.send(file = discord.File("clockimage.png"))
-        await msg.clear_reactions()
-
-@bot.command()
-async def avglet(ctx):
-    letters = "".join(ctx.message.content.lower().split()[2:]).translate(str.maketrans('', '', string.punctuation)) #much modifiers/methods same smhead stack overflow dumdum sadge
-    if letters.isalpha():
-        numbers = [ord(letter) - 96 for letter in letters]
-        rounded = round(sum(numbers)/len(letters))
-        await ctx.send(chr(ord('`')+rounded))
-        
-@bot.command(aliases=['2', '2x2', '3', '3x3', '4', '4x4', '5', '5x5', '6', '6x6', '7', '7x7'])
-async def _xyz(ctx):
-    layers = ctx.message.content.split()[1][0]
-
-    scrambleGen = {
-        # "1": scramble1, 
-        "2": scrambler222.get_WCA_scramble, 
-        "3": scrambler333.get_WCA_scramble, 
-        "4": scrambler444.get_WCA_scramble, 
-        "5": scrambler555.get_WCA_scramble, 
-        "6": scrambler666.get_WCA_scramble, 
-        "7": scrambler777.get_WCA_scramble, 
-    }
-
-    scramble = scrambleGen[layers]()
-
-    msg = await ctx.send(scramble)
-    
-    await msg.add_reaction('👀') 
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '👀' and reaction.message.id == msg.id
-
-    try:
-        reaction, user = await bot.wait_for('reaction_add', timeout=15, check=check)
-    except asyncio.TimeoutError:
-        await msg.clear_reactions()
-    else:
-        file = scrambleimage(int(layers), scramble)
-        file.save("scramble.png")
-        await ctx.send(file = discord.File("scramble.png"))
-        await msg.clear_reactions()
 
 @bot.command()
 async def tcs(ctx):
@@ -298,16 +140,6 @@ async def users(ctx):
         memberCount += guild.member_count
     await ctx.send("Total users: " + str(memberCount))
 
-
-@bot.command()
-async def guilds(ctx):
-    if ctx.message.author.id == 472128691539804160 or ctx.message.author.id == 483818735849963530:
-        with open("guilds.txt", "a") as f:
-            f.seek(0)
-            f.truncate()
-            for guild in bot.guilds:
-                f.write(str(bot.get_guild(guild.id)) + ": " + str(guild.id) + "\n")
-            f.close()
 
 @bot.command()
 async def custom(ctx):
@@ -961,4 +793,4 @@ async def _1(ctx, amount: int = 1):
         await ctx.send(scramble1()) 
 
 keep_alive.keep_alive()
-bot.run("NjAxMTEzNjg4MjQ1NjY1ODY0.XS9kvw.FlE1TrLOlnigO-FS4D4B--kaWIo")
+bot.run(os.getenv("TOKEN"))

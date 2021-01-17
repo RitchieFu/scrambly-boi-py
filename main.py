@@ -1,16 +1,13 @@
 import discord
-import kociemba
-import keep_alive
-import os
-from dotenv import load_dotenv
-import re
-import sqlite3
-import time
-from datetime import datetime
 from discord.ext import commands
+from dotenv import load_dotenv
+import keep_alive
+import kociemba
+import os
 from pyTwistyScrambler import scrambler333, scrambler444, scrambler555
 import asyncio
-import string
+import re
+import sqlite3
 
 load_dotenv()
 bot = commands.Bot(command_prefix = ['plz ', 'Plz ', 'PLZ ']) 
@@ -20,12 +17,9 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
-
 noobdict = {
   'U':'top', 'D':'bottom', 'R':'right', 'L':'left', 'F':'front', 'B':'back'
 }
-
-
 
 scrambleCommands = {
     'plz 3bld': scrambler333.get_3BLD_scramble,
@@ -62,12 +56,6 @@ async def on_message(message):
         await channel.send(embed = embed)
 
 
-@bot.command()
-async def users(ctx):
-    memberCount = 0
-    for guild in bot.guilds:
-        memberCount += guild.member_count
-    await ctx.send("Total users: " + str(memberCount))
 
 
 @bot.command()
@@ -385,27 +373,7 @@ async def memo(ctx):
                    '\n```')
 
 
-@bot.command()
-async def avg(ctx):
-  times = ctx.message.content.split(' ')[2:]
-  times = [int(i) for i in times]
-  average = (sum(times) - min(times) - max(times)) / (len(times) - 2)
-  await ctx.send("{:.2f}".format(float(average)))
 
-@bot.command()
-async def padoru(ctx):
-
-    dayOfYear = int(datetime.now().timetuple().tm_yday)
-    dayOfChristmas = 359
-
-    if dayOfChristmas - dayOfYear == 0:
-        await ctx.send(":christmas_tree: IT IS PADORU DAY!! :christmas_tree:")
-    else:
-        await ctx.send("<@510992389180096512>")
-
-@bot.command()
-async def test(ctx):
-    await ctx.send("Python: <:peponice:693014841614663700>")
 
 
 @bot.command(pass_context=True)
@@ -552,11 +520,6 @@ async def noob3(ctx):
     await ctx.send(input3(msg.split()))
     await n.clear_reactions()
 
-@bot.command(aliases=['1','1x1'])
-async def _1(ctx, amount: int = 1):
-    if amount > 5: amount = 5
-    for i in range(amount):
-        await ctx.send(scramble1()) 
 
 keep_alive.keep_alive()
 bot.run(os.getenv("TOKEN"))

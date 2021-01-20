@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-from scrambles import *
-import re
-import sqlite3
 import kociemba
+import re
+from scrambles import *
+import sqlite3
 
 def get_preferences(id):  
     conn = sqlite3.connect('custom.db')
@@ -11,8 +11,8 @@ def get_preferences(id):
     c.execute("SELECT * FROM cubers WHERE id = ?", (id,))
     return c.fetchone()
     conn.close()
-
     
+	
 class Memo(commands.Cog):
 
     def __init__(self, client):

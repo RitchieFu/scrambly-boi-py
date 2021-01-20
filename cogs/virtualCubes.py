@@ -22,6 +22,7 @@ reactiondict = {
     '⬆️':'x','⬇️':"x'",'⬅️':'y','➡️':"y'",'↩️':'z','↪️':"z'"
 }
 
+
 class Events(commands.Cog):
 
     def __init__(self, client):
@@ -190,6 +191,7 @@ class Events(commands.Cog):
             checklist = themoves.copy()
 
             await message.edit(content=str(' '.join(themoves[19:]) + '\n' + input3(themoves)))
+
 
 def setup(client):
     client.add_cog(Events(client))

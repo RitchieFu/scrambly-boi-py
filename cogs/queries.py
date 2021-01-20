@@ -1,7 +1,8 @@
+from bs4 import BeautifulSoup
 import discord
 from discord.ext import commands
 import requests
-from bs4 import BeautifulSoup
+
 
 class Queries(commands.Cog):
 
@@ -56,6 +57,7 @@ class Queries(commands.Cog):
                 await ctx.send("https://www.worldcubeassociation.org" + query)
             except:
                 await ctx.send("No results found...")
+
 
 def setup(client):
     client.add_cog(Queries(client))

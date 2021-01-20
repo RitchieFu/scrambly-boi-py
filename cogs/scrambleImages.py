@@ -1,14 +1,14 @@
+import asyncio
 import discord
 from discord.ext import commands
 from pyTwistyScrambler import scrambler333, scrambler222, scrambler444, scrambler555, pyraminxScrambler,scrambler666,scrambler777,megaminxScrambler,squareOneScrambler,skewbScrambler,clockScrambler
+from clockimage import *
+from megaimage import *
 from pyraminximage import *
 from scrambleupdate import *
-from clockimage import *
-from pyraminximage import *
-from squareoneimage import *
 from skewbimage import *
-from megaimage import *
-import asyncio
+from squareoneimage import *
+
 
 class ScrambleImages(commands.Cog):
 

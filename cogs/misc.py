@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
-from scrambles import scramble1, input3
 from pyTwistyScrambler import scrambler333
+from scrambles import scramble1, input3
 
 acceptedmoves = ['U', 'D', 'R', 'L', 'F', 'B']
+
 
 class Misc(commands.Cog):
 

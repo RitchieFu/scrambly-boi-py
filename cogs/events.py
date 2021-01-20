@@ -16,6 +16,15 @@ class Events(commands.Cog):
         if isinstance(error, CommandNotFound): return
         raise error
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+
+        if message.author.id == self.client.user.id:
+            return
+
+        await self.client.process_commands(message)
+
+
 def setup(client):
     client.add_cog(Events(client))
 

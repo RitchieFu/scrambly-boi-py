@@ -13,7 +13,6 @@ class ShowScramble(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    
     @commands.command()
     async def show(self, ctx, puzzle):
 
@@ -28,7 +27,7 @@ class ShowScramble(commands.Cog):
         }
 
         if puzzle in puzzles:
-            if any(i.isdigit() for i in puzzle):
+            if puzzle[0].isdigit():
                 layers = puzzle[0]
             else:
                 layers = False

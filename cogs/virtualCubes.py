@@ -23,7 +23,7 @@ reactiondict = {
 }
 
 
-class Events(commands.Cog):
+class VirtualCubes(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -194,4 +194,4 @@ class Events(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Events(client))
+    client.add_cog(VirtualCubes(client))

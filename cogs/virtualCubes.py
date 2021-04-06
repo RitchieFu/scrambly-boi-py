@@ -29,7 +29,12 @@ class VirtualCubes(commands.Cog):
         self.client = client
 
     @commands.command()
+    async def bro(self, ctx):
+        await ctx.send("bro")
+        
+    @commands.command()
     async def solve2(self, ctx):
+        print('command ran')
         w = white
         y = yello
         g = green
@@ -130,6 +135,8 @@ class VirtualCubes(commands.Cog):
 
     @commands.command()
     async def solve3(self, ctx):
+        print('command ran')
+
         w = white
         y = yello
         g = green

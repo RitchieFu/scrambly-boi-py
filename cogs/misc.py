@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pyTwistyScrambler import scrambler333
-# from scrambles import scramble1, input3
+from scrambleupdate import *
 from scrambles import *
 acceptedmoves = ['U', 'D', 'R', 'L', 'F', 'B', 'Uw', 'Dw', 'Rw', 'Lw', 'Fw', 'Bw']
 
@@ -65,7 +65,9 @@ class Misc(commands.Cog):
         except:
             await n.clear_reactions()
         else:
-            await ctx.send(input3(msg.split()))
+            file = scrambleimage(3, msg)
+            file.save("scramble.png")
+            await ctx.send(file = discord.File("scramble.png"))
             await n.clear_reactions()
     
     @commands.command(pass_context=True)
